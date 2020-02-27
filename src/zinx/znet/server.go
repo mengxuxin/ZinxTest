@@ -1,6 +1,7 @@
 package znet
 
 import (
+	"Zinx/src/zinx/utils"
 	"Zinx/src/zinx/zinterface"
 	"errors"
 	"fmt"
@@ -38,6 +39,10 @@ func CallBackToClient(conn *net.TCPConn, data []byte, cnt int)error {
 
 //start
 func (s *Server) Start() {
+	fmt.Printf("[zinx]server name: %s, listerner at ip:%s, port: %d is starting",
+		utils.GlobalObject.Name, utils.GlobalObject.Host, utils.GlobalObject.TcpPort)
+	fmt.Printf("[zinx] Version: %s, MaxConn: %d, MaxPackageSize:%d\n",
+		utils.GlobalObject.Version, utils.GlobalObject.MaxConn, utils.GlobalObject.MaxPackageSize)
 	fmt.Printf("start server listener at IP:%s, port:%d", s.IP, s.nPort)
 	go func() {
 		addr, err := net.ResolveTCPAddr(s.IPVersion, fmt.Sprintf("%s:%d", s.IP, s.nPort))
@@ -108,10 +113,10 @@ func (s *Server) AddRouter(router zinterface.IRouter) {
 //init server
 func NewServer(name string) zinterface.IServer {
 	s := &Server {
-		Name :name,
+		Name :utils.GlobalObject.Name,
 		IPVersion: "tcp4",
-		IP:"0.0.0.0",
-		nPort:8999,
+		IP:utils.GlobalObject.Host,
+		nPort:utils.GlobalObject.TcpPort,
 		Router:nil,
 	}
 
